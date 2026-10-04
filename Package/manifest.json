@@ -1,0 +1,9 @@
+{
+  "name": "ClaimPickup",
+  "version_number": "1.0.0",
+  "website_url": "https://discord.gg/cjayride",
+  "description": "Take ownership of ground loot, plants, and beehives on your client before pickup, so auto loot does not wait on a distant player. Client only.",
+  "dependencies": [
+    "denikson-BepInExPack_Valheim-5.4.2351"
+  ]
+}
