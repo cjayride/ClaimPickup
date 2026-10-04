@@ -1,4 +1,5 @@
 using BepInEx;
+using BepInEx.Configuration;
 using HarmonyLib;
 using UnityEngine;
 
@@ -9,17 +10,22 @@ namespace Cjayride.ClaimPickup
     {
         public const string PluginGuid = "cjayride.ClaimPickup";
         public const string PluginName = "Claim Pickup";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.1";
+
+        public static ConfigEntry<float> NearbyMeters;
 
         private void Awake()
         {
+            NearbyMeters = Config.Bind("General", "NearbyMeters", 5f,
+                new ConfigDescription("Skip the claim when another player is this close, so stacked combat does not duplicate a drop. Solo honey and plants still claim.", new AcceptableValueRange<float>(1f, 16f)));
             new Harmony(PluginGuid).PatchAll();
-            Logger.LogInfo("Ground loot, plants, and beehives claim ownership on your client before pickup.");
+            Logger.LogInfo("Ground loot, plants, and beehives claim ownership on your client before pickup, unless another player is already close.");
         }
     }
 
     internal static class Claim
     {
+
         public static void Take(Component thing, ZNetView view, Humanoid character)
         {
             if (thing == null || character == null || view == null || !view.IsValid())
@@ -32,8 +38,30 @@ namespace Cjayride.ClaimPickup
                 return;
             if (thing.GetComponentInParent<Vagon>() != null)
                 return;
+            if (OtherPlayerNearby(thing.transform.position))
+                return;
 
             view.ClaimOwnership();
+        }
+
+        static bool OtherPlayerNearby(Vector3 pos)
+        {
+            var players = Player.GetAllPlayers();
+            if (players == null)
+                return false;
+
+            float range = Plugin.NearbyMeters != null ? Plugin.NearbyMeters.Value : 5f;
+            float limit = range * range;
+            for (int i = 0; i < players.Count; i++)
+            {
+                Player other = players[i];
+                if (other == null || other == Player.m_localPlayer)
+                    continue;
+                if ((other.transform.position - pos).sqrMagnitude <= limit)
+                    return true;
+            }
+
+            return false;
         }
     }
 

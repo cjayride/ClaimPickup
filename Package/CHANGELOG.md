@@ -1,3 +1,7 @@
+# 1.0.1
+
+- Do not claim a drop if another player is within NearbyMeters (default 5). Stacked combat stays on vanilla ownership so both of you do not pick up the same shield.
+
 # 1.0.0
 
 - Claim ownership on your client before a ground drop, plant, or beehive is picked up, so auto loot and area harvest do not wait on whoever loaded the zone first.
