@@ -10,7 +10,7 @@ namespace Cjayride.ClaimPickup
     {
         public const string PluginGuid = "cjayride.ClaimPickup";
         public const string PluginName = "Claim Pickup";
-        public const string PluginVersion = "1.0.1";
+        public const string PluginVersion = "1.0.2";
 
         public static ConfigEntry<float> NearbyMeters;
 
@@ -73,6 +73,34 @@ namespace Cjayride.ClaimPickup
             if (__instance == null)
                 return;
             Claim.Take(__instance, __instance.m_nview, character);
+        }
+    }
+
+    // Autopick never calls Pickup until this client already owns the drop. It only
+    // calls RequestOwn, which waits on the server. Claim here so the same check
+    // can pick the stack up.
+    [HarmonyPatch(typeof(ItemDrop), nameof(ItemDrop.CanPickup))]
+    internal static class ClaimBeforeAutoPickup
+    {
+        private static void Prefix(ItemDrop __instance)
+        {
+            if (__instance == null || Player.m_localPlayer == null)
+                return;
+            Claim.Take(__instance, __instance.m_nview, Player.m_localPlayer);
+        }
+    }
+
+    [HarmonyPatch(typeof(ItemDrop), nameof(ItemDrop.RequestOwn))]
+    internal static class ClaimInsteadOfRequest
+    {
+        private static bool Prefix(ItemDrop __instance)
+        {
+            if (__instance == null || Player.m_localPlayer == null)
+                return true;
+            if (__instance.m_nview != null && __instance.m_nview.IsOwner())
+                return true;
+            Claim.Take(__instance, __instance.m_nview, Player.m_localPlayer);
+            return __instance.m_nview == null || !__instance.m_nview.IsOwner();
         }
     }
 

@@ -1,3 +1,7 @@
+# 1.0.2
+
+- Ground drops from area harvest are claimed as soon as auto-pickup looks at them, instead of waiting on a RequestOwn to the server. Still skipped when another player is within NearbyMeters.
+
 # 1.0.1
 
 - Do not claim a drop if another player is within NearbyMeters (default 5). Stacked combat stays on vanilla ownership so both of you do not pick up the same shield.
