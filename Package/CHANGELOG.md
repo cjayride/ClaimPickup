@@ -1,3 +1,8 @@
+# 1.0.3
+
+- Verified against Valheim 1.0.21 (Release build).
+- BepInEx dependency set to `denikson-BepInExPack_Valheim-5.4.2360`.
+
 # 1.0.2
 
 - Ground drops from area harvest are claimed as soon as auto-pickup looks at them, instead of waiting on a RequestOwn to the server. Still skipped when another player is within NearbyMeters.

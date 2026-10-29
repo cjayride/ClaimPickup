@@ -10,7 +10,7 @@ namespace Cjayride.ClaimPickup
     {
         public const string PluginGuid = "cjayride.ClaimPickup";
         public const string PluginName = "Claim Pickup";
-        public const string PluginVersion = "1.0.2";
+        public const string PluginVersion = "1.0.3";
 
         public static ConfigEntry<float> NearbyMeters;
 

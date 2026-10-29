@@ -1,5 +1,9 @@
 # Claim Pickup
 
+## 1.0.3
+
+- Verified against Valheim 1.0.21. BepInEx dependency: `denikson-BepInExPack_Valheim-5.4.2360`.
+
 ## 1.0.2
 
 - Area-harvest drops on the ground are claimed during auto-pickup, so they are not left waiting on the server.
